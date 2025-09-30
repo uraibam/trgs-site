@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Brand tokens */
+:root {
+  --flare: #FF4E00;
+  --glow:  #FF9508;
+  --bg:    #000000;
+  --text:  #FFFFFF;
+}
+
+html, body { background: var(--bg); color: var(--text); }
