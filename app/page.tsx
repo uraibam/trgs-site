@@ -14,6 +14,12 @@ export default function Home() {
             Clarity for founders. Systems for teams. Fire for CEOs.
           </p>
         </section>
+
+        {/* Temporary spacer so you can see the header compress on scroll */}
+        <div className="h-[120vh]" />
+        <section id="newsletter" className="py-24 border-t border-white/10">
+          <h2 className="text-2xl font-medium">Newsletter placeholder</h2>
+        </section>
       </main>
     </>
   );
