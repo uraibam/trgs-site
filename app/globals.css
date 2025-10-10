@@ -1,13 +1,18 @@
+/* app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Brand tokens */
-:root {
+/* Brand tokens (usable via var() in custom CSS if needed) */
+:root{
   --flare: #FF4E00;
   --glow:  #FF9508;
   --bg:    #000000;
   --text:  #FFFFFF;
 }
 
-html, body { background: var(--bg); color: var(--text); }
+/* Smooth fonts on dark bg */
+html, body {
+  background: #000;
+  color: #fff;
+}
