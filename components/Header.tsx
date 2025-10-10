@@ -1,17 +1,9 @@
-// components/Header.tsx
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-/**
- * Premium minimal header:
- * - Wordmark only (left), CTA (right)
- * - Glass/blur background + hairline border
- * - Compresses on scroll
- * - Respects prefers-reduced-motion
- */
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
 
@@ -38,10 +30,9 @@ export default function Header() {
           "flex items-center justify-between",
         ].join(" ")}
       >
-        {/* Wordmark */}
         <Link href="/" aria-label="TRGS home" className="flex items-center gap-2">
           <Image
-            src="/assets/wordmark_short.png" // uses your uploaded file
+            src="/assets/wordmark_short.png"
             alt="TRGS"
             width={160}
             height={40}
@@ -50,7 +41,6 @@ export default function Header() {
           />
         </Link>
 
-        {/* Primary CTA */}
         <a
           href="#newsletter"
           className={[
