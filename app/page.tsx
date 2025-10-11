@@ -1,4 +1,5 @@
-import Hero from '@/components/Hero';
+// NEW (works immediately)
+import Hero from '../components/Hero'
 
 export default function Page() {
   return (
