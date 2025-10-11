@@ -1,9 +1,16 @@
-.galaxy-root {
-  position: absolute;
-  inset: 0;
+/* components/Galaxy.css */
+.galaxy-container{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;          /* background only */
+  background:transparent !important;
+  z-index:0;
 }
-.galaxy-root canvas {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
+.galaxy-container canvas{
+  width:100% !important;
+  height:100% !important;
+  display:block;
+  background:transparent !important;
 }
