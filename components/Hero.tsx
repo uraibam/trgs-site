@@ -1,62 +1,45 @@
 // components/Hero.tsx
 'use client';
 
-import Image from 'next/image';
 import Galaxy from './Galaxy';
 
 export default function Hero() {
   return (
-    <section
-      className="relative min-h-[92vh] w-full overflow-hidden bg-black text-white"
-      aria-label="Hero"
-    >
-      {/* BACKGROUND — WebGL galaxy, tuned to React Bits look */}
+    <section className="relative h-[88vh] md:h-screen overflow-hidden bg-black">
+      {/* Starfield */}
       <Galaxy
-        className="absolute inset-0 z-[1]"
-        mouseRepulsion={true}
-        mouseInteraction={true}
-        density={0.45}
+        className="absolute inset-0 -z-10"
+        density={0.85}
         glowIntensity={0.18}
-        saturation={0.18}
+        saturation={0.12}
         hueShift={220}
-        speed={0.6}
-        starSpeed={0.3}
-        twinkleIntensity={0.25}
-        rotationSpeed={0.06}
-        transparent={true}
+        speed={0.7}
+        starSpeed={0.25}
+        twinkleIntensity={0.12}
+        mouseInteraction={true}
+        mouseRepulsion={false}
+        transparent
       />
 
-      {/* WARM ORANGE UNDERGLOW */}
+      {/* Warm vignette, very subtle */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-[30vh] z-[2] mx-auto h-[60vh] w-[90vw] rounded-[50%] blur-[160px]"
+        className="absolute inset-0 -z-10 pointer-events-none"
         style={{
           background:
-            'radial-gradient(ellipse at bottom right, rgba(255,78,0,0.25) 0%, rgba(0,0,0,0) 70%)',
+            'radial-gradient(80% 55% at 70% 80%, rgba(255,78,0,0.20), rgba(0,0,0,0) 45%)',
         }}
-        aria-hidden="true"
       />
 
-      {/* WORDMARK (static) */}
-      <div className="relative z-[3] mx-auto flex min-h-[92vh] max-w-[1400px] items-center justify-center px-6">
-        <Image
-          src="/assets/wordmark_full.svg"  // your uploaded file
+      {/* Wordmark */}
+      <div className="relative z-10 h-full flex items-center justify-center">
+        <img
+          src="/wordmark_full.svg"
           alt="THE ROCKET GUY"
-          width={1400}
-          height={280}
-          priority
-          className="w-[92vw] max-w-[1200px] select-none"
+          className="w-[82%] max-w-[1100px] drop-shadow-[0_0_22px_rgba(255,149,8,.35)]"
         />
       </div>
 
-      {/* SOFT FADE TO NEXT SECTION */}
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-40"
-        style={{
-          background:
-            'linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 70%, rgba(0,0,0,1) 100%)',
-        }}
-        aria-hidden="true"
-      />
+      {/* NOTE: we intentionally removed the bottom fade */}
     </section>
   );
 }
