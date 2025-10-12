@@ -1,7 +1,6 @@
 // components/Galaxy.tsx
 import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
 import { useEffect, useRef } from 'react';
-import './Galaxy.css';
 
 const vertexShader = `
 attribute vec2 uv;
@@ -71,6 +70,7 @@ vec3 StarLayer(vec2 uv){
   vec3 col = vec3(0.);
   vec2 gv = fract(uv) - 0.5;
   vec2 id = floor(uv);
+
   for(int y=-1; y<=1; y++){
     for(int x=-1; x<=1; x++){
       vec2 si = id + vec2(float(x), float(y));
@@ -92,9 +92,13 @@ vec3 StarLayer(vec2 uv){
 
       vec2 pad = vec2(tris(seed*34.0 + uTime*uSpeed/10.0),
                       tris(seed*38.0 + uTime*uSpeed/30.0)) - 0.5;
-      float star = Star(gv - vec2(float(x), float(y)) - pad, flareSize);
+
+      vec2 offset = vec2(float(x), float(y));
+      float star = Star(gv - offset - pad, flareSize);
       float tw = mix(1.0, (trisn(uTime*uSpeed + seed*6.2831)*0.5 + 1.0), uTwinkleIntensity);
-      col += star * size * base * tw;
+
+      // softer overall contribution so the field feels less cluttered
+      col += star * size * base * tw * 0.85;
     }
   }
   return col;
@@ -117,7 +121,7 @@ void main(){
     vec2 rep = normalize(uv - m) * (uRepulsionStrength/(d+0.1));
     uv += rep * 0.05 * uMouseActiveFactor;
   }else{
-    uv += mouseNorm * 0.1 * uMouseActiveFactor;
+    uv += mouseNorm * 0.08 * uMouseActiveFactor;
   }
 
   float autoRot = uTime * uRotationSpeed;
@@ -128,7 +132,7 @@ void main(){
   vec3 col = vec3(0.0);
   for(float i=0.0; i<1.0; i+=1.0/NUM_LAYER){
     float depth = fract(i + uStarSpeed*uSpeed);
-    float scale = mix(20.0*uDensity, 0.5*uDensity, depth);
+    float scale = mix(16.0*uDensity, 0.4*uDensity, depth); // slightly larger “parallax” scale
     float fade = depth * smoothstep(1.0, 0.9, depth);
     col += StarLayer(uv * scale + i*453.32) * fade;
   }
@@ -160,18 +164,18 @@ type Props = {
 export default function Galaxy({
   focal = [0.5, 0.5],
   rotation = [1.0, 0.0],
-  starSpeed = 0.25,
-  density = 0.85,
-  hueShift = 220,           // cooler, space-like
+  starSpeed = 0.18,        // slower drift (closer to demo)
+  density = 0.65,          // fewer stars (less clutter)
+  hueShift = 220,          // cooler tone
   disableAnimation = false,
-  speed = 0.7,
-  mouseInteraction = true,
-  glowIntensity = 0.18,
-  saturation = 0.12,        // MUCH lower saturation
-  mouseRepulsion = false,   // gentler default
-  repulsionStrength = 2,
-  twinkleIntensity = 0.12,
-  rotationSpeed = 0.03,
+  speed = 0.65,
+  mouseInteraction = true, // enable subtle parallax
+  glowIntensity = 0.14,
+  saturation = 0.10,
+  mouseRepulsion = false,
+  repulsionStrength = 1.5,
+  twinkleIntensity = 0.10,
+  rotationSpeed = 0.02,
   autoCenterRepulsion = 0.0,
   transparent = true,
   className = '',
@@ -195,6 +199,9 @@ export default function Galaxy({
       powerPreference: 'high-performance',
     });
 
+    // crisp but safe DPR
+    (renderer as any).dpr = Math.min(window.devicePixelRatio || 1, 1.75);
+
     const gl = renderer.gl;
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -202,8 +209,8 @@ export default function Galaxy({
 
     let program: Program | null = null;
 
-    const resize = () => {
-      renderer.setSize(ctn.offsetWidth, ctn.offsetHeight);
+    const setSize = () => {
+      renderer.setSize(ctn.clientWidth, ctn.clientHeight);
       if (program) {
         program.uniforms.uResolution.value = new Color(
           gl.canvas.width,
@@ -212,8 +219,10 @@ export default function Galaxy({
         );
       }
     };
-    window.addEventListener('resize', resize);
-    resize();
+
+    const ro = new ResizeObserver(setSize);
+    ro.observe(ctn);
+    setSize();
 
     const geometry = new Triangle(gl);
     program = new Program(gl, {
@@ -286,7 +295,7 @@ export default function Galaxy({
 
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener('resize', resize);
+      ro.disconnect();
       if (mouseInteraction) {
         ctn.removeEventListener('mousemove', onMove);
         ctn.removeEventListener('mouseleave', onLeave);
@@ -300,5 +309,18 @@ export default function Galaxy({
     rotationSpeed, repulsionStrength, autoCenterRepulsion, transparent
   ]);
 
-  return <div ref={container} className={`galaxy-container ${className}`} />;
+  // Absolutely fill the parent (so no bottom black strip), and allow mouse input.
+  return (
+    <div
+      ref={container}
+      className={className}
+      style={{
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        pointerEvents: 'auto'
+      }}
+    />
+  );
 }
