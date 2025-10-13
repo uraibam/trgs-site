@@ -12,8 +12,10 @@ void main(){
 }
 `;
 
+// Premium-tuned shader: fewer, sharper stars; subtle parallax; depth fade
 const fragmentShader = `
 precision highp float;
+
 uniform float uTime;
 uniform vec3  uResolution;
 uniform vec2  uFocal;
@@ -32,6 +34,8 @@ uniform float uRepulsionStrength;
 uniform float uMouseActiveFactor;
 uniform float uAutoCenterRepulsion;
 uniform bool  uTransparent;
+uniform float uDrift;           // << forward "travel" amount
+
 varying vec2  vUv;
 
 #define NUM_LAYER 4.0
@@ -54,15 +58,16 @@ vec3 hsv2rgb(vec3 c){
   return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
 }
 
+// Sharper stars, brighter flares but controlled by uGlowIntensity
 float Star(vec2 uv, float flare){
   float d = length(uv);
-  float m = (0.05 * uGlowIntensity) / d;
-  float rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x * uv.y * 1000.0));
+  float m = (0.045 * uGlowIntensity) / d;
+  float rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x * uv.y * 900.0));
   m += rays * flare * uGlowIntensity;
   uv *= MAT45;
-  rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x * uv.y * 1000.0));
-  m += rays * 0.3 * flare * uGlowIntensity;
-  m *= smoothstep(1.0, 0.2, d);
+  rays = smoothstep(0.0, 1.0, 1.0 - abs(uv.x * uv.y * 900.0));
+  m += rays * 0.28 * flare * uGlowIntensity;
+  m *= smoothstep(1.0, 0.22, d);
   return m;
 }
 
@@ -77,7 +82,7 @@ vec3 StarLayer(vec2 uv){
       float seed = Hash21(si);
       float size = fract(seed * 345.32);
       float glossLocal = tri(uStarSpeed / (PERIOD * seed + 1.0));
-      float flareSize = smoothstep(0.9, 1.0, size) * glossLocal;
+      float flareSize = smoothstep(0.92, 1.0, size) * glossLocal;
 
       float red = smoothstep(STAR_COLOR_CUTOFF, 1.0, Hash21(si + 1.0)) + STAR_COLOR_CUTOFF;
       float blu = smoothstep(STAR_COLOR_CUTOFF, 1.0, Hash21(si + 3.0)) + STAR_COLOR_CUTOFF;
@@ -93,12 +98,13 @@ vec3 StarLayer(vec2 uv){
       vec2 pad = vec2(tris(seed*34.0 + uTime*uSpeed/10.0),
                       tris(seed*38.0 + uTime*uSpeed/30.0)) - 0.5;
 
-      vec2 offset = vec2(float(x), float(y));
-      float star = Star(gv - offset - pad, flareSize);
-      float tw = mix(1.0, (trisn(uTime*uSpeed + seed*6.2831)*0.5 + 1.0), uTwinkleIntensity);
+      float star = Star(gv - vec2(float(x), float(y)) - pad, flareSize);
 
-      // softer overall contribution so the field feels less cluttered
-      col += star * size * base * tw * 0.85;
+      // More cinematic range: a few stars punch brighter, most stay subtle
+      float brightPunch = smoothstep(0.98, 1.0, size) * 0.8 + 0.2;
+
+      float tw = mix(1.0, (trisn(uTime*uSpeed + seed*6.2831)*0.5 + 1.0), uTwinkleIntensity);
+      col += star * size * brightPunch * base * tw * 0.85;
     }
   }
   return col;
@@ -107,6 +113,9 @@ vec3 StarLayer(vec2 uv){
 void main(){
   vec2 focalPx = uFocal * uResolution.xy;
   vec2 uv = (vUv * uResolution.xy - focalPx) / uResolution.y;
+
+  // Forward drift: gives "flying through space" feel
+  uv += vec2(0.0, -uDrift * uTime * 0.02);
 
   vec2 mouseNorm = uMouse - vec2(0.5);
 
@@ -119,7 +128,7 @@ void main(){
     vec2 m = (uMouse * uResolution.xy - focalPx) / uResolution.y;
     float d = length(uv - m);
     vec2 rep = normalize(uv - m) * (uRepulsionStrength/(d+0.1));
-    uv += rep * 0.05 * uMouseActiveFactor;
+    uv += rep * 0.04 * uMouseActiveFactor;
   }else{
     uv += mouseNorm * 0.08 * uMouseActiveFactor;
   }
@@ -132,7 +141,7 @@ void main(){
   vec3 col = vec3(0.0);
   for(float i=0.0; i<1.0; i+=1.0/NUM_LAYER){
     float depth = fract(i + uStarSpeed*uSpeed);
-    float scale = mix(16.0*uDensity, 0.4*uDensity, depth); // slightly larger “parallax” scale
+    float scale = mix(16.0*uDensity, 0.4*uDensity, depth);
     float fade = depth * smoothstep(1.0, 0.9, depth);
     col += StarLayer(uv * scale + i*453.32) * fade;
   }
@@ -158,26 +167,28 @@ type Props = {
   rotationSpeed?: number;
   autoCenterRepulsion?: number;
   transparent?: boolean;
+  drift?: number;             // << forward motion strength
   className?: string;
 };
 
 export default function Galaxy({
   focal = [0.5, 0.5],
   rotation = [1.0, 0.0],
-  starSpeed = 0.18,        // slower drift (closer to demo)
-  density = 0.65,          // fewer stars (less clutter)
-  hueShift = 220,          // cooler tone
+  starSpeed = 0.12,       // gentle, continuous
+  density = 0.62,         // uncluttered
+  hueShift = 220,         // cool space tone
   disableAnimation = false,
   speed = 0.65,
-  mouseInteraction = true, // enable subtle parallax
-  glowIntensity = 0.14,
+  mouseInteraction = true,
+  glowIntensity = 0.16,
   saturation = 0.10,
-  mouseRepulsion = false,
-  repulsionStrength = 1.5,
-  twinkleIntensity = 0.10,
-  rotationSpeed = 0.02,
+  mouseRepulsion = false, // parallax-based default
+  repulsionStrength = 1.2,
+  twinkleIntensity = 0.12,
+  rotationSpeed = 0.015,  // slow camera spin
   autoCenterRepulsion = 0.0,
   transparent = true,
+  drift = 0.55,           // forward travel feel
   className = '',
 }: Props) {
   const container = useRef<HTMLDivElement | null>(null);
@@ -199,7 +210,7 @@ export default function Galaxy({
       powerPreference: 'high-performance',
     });
 
-    // crisp but safe DPR
+    // keep GPU load bounded on mobile/retina
     (renderer as any).dpr = Math.min(window.devicePixelRatio || 1, 1.75);
 
     const gl = renderer.gl;
@@ -249,6 +260,7 @@ export default function Galaxy({
         uMouseActiveFactor: { value: 0.0 },
         uAutoCenterRepulsion: { value: autoCenterRepulsion },
         uTransparent: { value: transparent },
+        uDrift: { value: drift },
       },
     });
 
@@ -306,21 +318,14 @@ export default function Galaxy({
   }, [
     focal, rotation, starSpeed, density, hueShift, disableAnimation, speed,
     mouseInteraction, glowIntensity, saturation, mouseRepulsion, twinkleIntensity,
-    rotationSpeed, repulsionStrength, autoCenterRepulsion, transparent
+    rotationSpeed, repulsionStrength, autoCenterRepulsion, transparent, drift
   ]);
 
-  // Absolutely fill the parent (so no bottom black strip), and allow mouse input.
   return (
     <div
       ref={container}
       className={className}
-      style={{
-        position: 'absolute',
-        inset: 0,
-        width: '100%',
-        height: '100%',
-        pointerEvents: 'auto'
-      }}
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'auto' }}
     />
   );
 }
