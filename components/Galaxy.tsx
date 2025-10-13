@@ -129,7 +129,7 @@ export default function Galaxy({
   hueShift = 270,
   speed = 0.7,
   glowIntensity = 0.28,    // ↑ visibility
-  saturation = 0.48,
+  saturation = 0.7,
   twinkleIntensity = 0.20, // ↑ gentle twinkle
   rotationSpeed = 0.8,
   drift = 1,             // forward travel
