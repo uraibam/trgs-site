@@ -180,12 +180,12 @@ export default function Galaxy({
   disableAnimation = false,
   speed = 0.65,
   mouseInteraction = true,
-  glowIntensity = 0.16,
-  saturation = 0.10,
+  glowIntensity = 0.36,
+  saturation = 0.15,
   mouseRepulsion = false, // parallax-based default
   repulsionStrength = 1.2,
   twinkleIntensity = 0.12,
-  rotationSpeed = 0.015,  // slow camera spin
+  rotationSpeed = 0.15,  // slow camera spin
   autoCenterRepulsion = 0.0,
   transparent = true,
   drift = 0.55,           // forward travel feel
