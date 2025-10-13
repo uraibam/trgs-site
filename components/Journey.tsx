@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import CircularGallery from './circular-gallery/CircularGallery';
+import Gallery from './Gallery';
 import journey from '../content/journey.json';
 
 
