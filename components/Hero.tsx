@@ -11,7 +11,7 @@ export default function Hero() {
       <Galaxy
         className="z-0"
         density={0.4}
-        glowIntensity={0.3}
+        glowIntensity={0.2}
         saturation={0.3}
         twinkleIntensity={0.4}
         starSpeed={0.5}
