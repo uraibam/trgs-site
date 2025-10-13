@@ -1,43 +1,70 @@
 // components/Hero.tsx
-'use client';
-
-import Galaxy from './Galaxy';
+import Image from "next/image";
+import Galaxy from "./Galaxy";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
-      {/* Starfield background */}
-      <Galaxy className="absolute inset-0 z-0 pointer-events-auto" />
+    <div className="relative min-h-[100svh] overflow-hidden bg-black">
+      {/* Galaxy background */}
+      <Galaxy className="absolute inset-0" />
 
-      {/* Warm vignette to add depth (subtle) */}
+      {/* Radial vignette (edge fade to black for cinematic depth) */}
       <div
-        className="pointer-events-none absolute inset-0 z-10"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(60% 50% at 50% 60%, rgba(255,78,0,0.12) 0%, rgba(0,0,0,0.0) 60%)',
+            "radial-gradient(120% 90% at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.65) 80%, rgba(0,0,0,0.9) 100%)",
         }}
       />
 
-      {/* Centered wordmark overlay */}
-      <div className="relative z-20 flex min-h-[100svh] items-center justify-center px-6">
-        <div className="relative">
-          {/* soft glow behind the logo */}
-          <div className="absolute -inset-8 blur-[40px] opacity-40"
-               style={{ background: 'radial-gradient(50% 50% at 50% 50%, rgba(255,149,8,0.35) 0%, rgba(0,0,0,0) 70%)' }} />
+      {/* Content wrapper */}
+      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6">
+        {/* Soft bottom-right warm glow with pulse */}
+        <div
+          aria-hidden="true"
+          className="absolute -z-10 h-[40vh] w-[60vw] rounded-[999px] blur-3xl"
+          style={{
+            bottom: "18%",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background:
+              "radial-gradient(50% 60% at 50% 50%, rgba(255,78,0,0.22) 0%, rgba(255,78,0,0.08) 60%, rgba(255,78,0,0) 100%)",
+            animation: "pulseGlow 5s ease-in-out infinite",
+          }}
+        />
 
-          {/* CHANGE THIS SRC to the path that works in your browser test */}
-          <img
-            src="/assets/wordmark_full.svg"
-            alt="THE ROCKET GUY"
-            className="relative block w-[min(90vw,1100px)] h-auto select-none"
-            draggable={false}
-          />
-        </div>
+        {/* Wordmark */}
+        <Image
+          src="/wordmark_full.png" // your uploaded asset
+          alt="THE ROCKET GUY"
+          width={1400}
+          height={320}
+          priority
+          className="w-[min(88vw,1200px)] h-auto select-none"
+        />
+
+        {/* Scroll cue */}
+        <a
+          href="#proof"
+          className="group absolute bottom-6 md:bottom-8 inline-flex flex-col items-center gap-2 text-white/70 focus:outline-none"
+          aria-label="Scroll to next section"
+        >
+          <svg
+            className="h-4 w-4 opacity-70 group-hover:opacity-100"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{ animation: "cueBob 2.2s ease-in-out infinite" }}
+          >
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+          <span className="text-xs tracking-wide">Scroll</span>
+        </a>
       </div>
-
-      {/* Fade to black into next section */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32 z-20"
-           style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0) 0%, #000 100%)' }} />
-    </section>
+    </div>
   );
 }
