@@ -32,7 +32,7 @@ export default function Hero() {
         />
 
         <Image
-          src="/wordmark_full.png"
+          src="assets/wordmark_full.png"
           alt="THE ROCKET GUY"
           width={1400}
           height={320}
@@ -44,8 +44,17 @@ export default function Hero() {
         <a
           href="#proof"
           className="group absolute bottom-6 md:bottom-8 inline-flex flex-col items-center gap-2 text-white/70"
-          aria-label="Scroll to next section"
+          aria-label="Scroll"
         >
+          <div className="relative h-6 w-4 rounded-full border border-white/60">
+            <div
+              className="absolute left-1/2 h-1.5 w-[2px] -translate-x-1/2 bg-white/70"
+              style={{ top: "5px", animation: "wheel 1.8s ease-in-out infinite" }}
+            />
+          </div>
+          <span className="text-xs tracking-wide opacity-80 group-hover:opacity-100">
+            Scroll
+          </span>
           <svg
             className="h-4 w-4 opacity-70 group-hover:opacity-100"
             viewBox="0 0 24 24"
