@@ -297,18 +297,21 @@ class Media {
     }
   }
 
-  onResize({ screen, viewport }: { screen: { width: number; height: number }; viewport: { width: number; height: number } }) {
-    this.screen = screen;
-    this.viewport = viewport;
-    const scale = this.screen.height / 1500;
-    this.plane.scale.y = (this.viewport.height * (900 * scale)) / this.screen.height;
-    this.plane.scale.x = (this.viewport.width * (700 * scale)) / this.screen.width;
-    this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
-    this.padding = 2;
-    this.width = this.plane.scale.x + this.padding;
-    this.widthTotal = this.width * this.length;
-    this.x = this.width * this.index;
-  }
+  onResize(payload?: {
+  screen?: { width: number; height: number };
+  viewport?: { width: number; height: number };
+}) {
+  if (payload?.screen) this.screen = payload.screen;
+  if (payload?.viewport) this.viewport = payload.viewport;
+
+  const scale = this.screen.height / 1500;
+  this.plane.scale.y = (this.viewport.height * (900 * scale)) / this.screen.height;
+  this.plane.scale.x = (this.viewport.width * (700 * scale)) / this.screen.width;
+  this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
+  this.padding = 2;
+  this.width = this.plane.scale.x + this.padding;
+  this.widthTotal = this.width * this.length;
+  this.x = this.width * this.index;
 }
 
 class App {
