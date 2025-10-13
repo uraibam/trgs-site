@@ -2,8 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import CircularGallery from './circular-gallery/CircularGallery';
-import journey from '@/data/journey.json';
-import { trackEvent } from '@/lib/analytics';
+import journey from '../content/journey.json';
+
 
 type Phase = { name: string; items: { title: string; caption: string; image: string; alt?: string; placeholder?: boolean }[] };
 
@@ -37,35 +37,6 @@ export default function SectionJourney() {
   };
 
   const activePhase = indexToPhase(activeIndex);
-
-  useEffect(() => {
-    // track section seen once
-    if (!sectionRef.current || seen) return;
-    const io = new IntersectionObserver(
-      entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting && !seen) {
-            setSeen(true);
-            trackEvent('journey_seen');
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    io.observe(sectionRef.current);
-    return () => io.disconnect();
-  }, [seen]);
-
-  // track tile seen once per logical item
-  const seenSetRef = useRef<Set<number>>(new Set());
-
-  const handleIndexChange = (i: number) => {
-    setActiveIndex(i);
-    if (!seenSetRef.current.has(i)) {
-      seenSetRef.current.add(i);
-      trackEvent('journey_tile_seen', { index: i, title: flatItems[i]?.alt ?? '' });
-    }
-  };
 
   return (
     <section id="journey" ref={sectionRef} className="relative bg-[var(--bg)] text-[var(--text)] py-16 md:py-24">
