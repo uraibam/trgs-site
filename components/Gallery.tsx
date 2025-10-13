@@ -76,6 +76,18 @@ function createTextTexture(
   return { texture, width: canvas.width, height: canvas.height };
 }
 
+function createPlaceholderTexture(gl: WebGLRenderingContext) {
+  const c = document.createElement('canvas');
+  c.width = 8;
+  c.height = 8;
+  const ctx = c.getContext('2d')!;
+  ctx.fillStyle = 'rgba(255,255,255,0.06)';
+  ctx.fillRect(0, 0, 8, 8);
+  const t = new Texture(gl, { generateMipmaps: false });
+  t.image = c;
+  return t;
+}
+
 class Title {
   gl: WebGLRenderingContext;
   plane: Mesh;
@@ -168,7 +180,7 @@ class Media {
 
   extra = 0;
   speed = 0;
-  padding = 2;
+  padding = 2.4;
   width = 0;
   widthTotal = 0;
   x = 0;
@@ -194,8 +206,10 @@ class Media {
     Object.assign(this, opts);
     this.createShader();
     this.createMesh();
-    this.createTitle(opts.caption);
-    // Pass real sizes on first call to avoid destructure errors
+    // truncate to avoid overlap; DOM labels can replace later
+    const cap = opts.caption.length > 50 ? opts.caption.slice(0, 47) + '…' : opts.caption;
+    this.createTitle(cap);
+    // First measured size
     this.onResize({ screen: this.screen, viewport: this.viewport });
   }
 
@@ -216,8 +230,8 @@ class Media {
         void main() {
           vUv = uv;
           vec3 p = position;
-          // subtle z wobble tied to scroll speed
-          p.z = (sin(p.x * 4.0 + uTime) * 1.2 + cos(p.y * 2.0 + uTime) * 1.2) * (0.08 + uSpeed * 0.4);
+          // calmer wobble tied to scroll speed
+          p.z = (sin(p.x * 3.0 + uTime) * 1.0 + cos(p.y * 1.5 + uTime) * 1.0) * (0.04 + uSpeed * 0.2);
           gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
         }
       `,
@@ -268,6 +282,12 @@ class Media {
     img.onload = () => {
       texture.image = img;
       this.program.uniforms.uImageSizes.value = [img.naturalWidth, img.naturalHeight];
+    };
+    img.onerror = () => {
+      // Fallback to placeholder instead of showing a black card
+      const ph = createPlaceholderTexture(this.gl);
+      this.program.uniforms.tMap.value = ph;
+      this.program.uniforms.uImageSizes.value = [8, 8];
     };
   }
 
@@ -339,7 +359,6 @@ class Media {
     this.plane.scale.y = (this.viewport.height * (900 * scale)) / this.screen.height;
     this.plane.scale.x = (this.viewport.width * (700 * scale)) / this.screen.width;
     this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
-    this.padding = 2;
     this.width = this.plane.scale.x + this.padding;
     this.widthTotal = this.width * this.length;
     this.x = this.width * this.index;
@@ -362,7 +381,7 @@ class App {
   viewport = { width: 0, height: 0 };
 
   scrollSpeed: number;
-  scroll = { ease: 0.05, current: 0, target: 0, last: 0, position: 0 };
+  scroll = { ease: 0.12, current: 0, target: 0, last: 0, position: 0 };
   isDown = false;
   start = 0;
 
@@ -373,19 +392,18 @@ class App {
 
   raf = 0;
 
-  onCheckDebounce: () => void;
   onIndexChange?: (index: number) => void;
 
   constructor(
     container: HTMLDivElement,
     {
       items,
-      bend = 3,
+      bend = 2,
       textColor = '#ffffff',
-      borderRadius = 0.05,
+      borderRadius = 0.12,
       font = 'bold 26px system-ui',
-      scrollSpeed = 2,
-      scrollEase = 0.05,
+      scrollSpeed = 1.6,
+      scrollEase = 0.12,
       onIndexChange,
     }: {
       items: { image: string; text: string; alt?: string }[];
@@ -406,8 +424,6 @@ class App {
     this.borderRadius = borderRadius;
     this.font = font;
     this.onIndexChange = onIndexChange;
-
-    this.onCheckDebounce = debounce(this.onCheck.bind(this), 160);
 
     this.createRenderer();
     this.createCamera();
@@ -487,6 +503,7 @@ class App {
 
   onTouchUp = () => {
     this.isDown = false;
+    // snap only on drag/touch end
     this.onCheck();
   };
 
@@ -494,7 +511,7 @@ class App {
     const anyE = e as unknown as { wheelDelta?: number; detail?: number };
     const delta = e.deltaY ?? anyE.wheelDelta ?? anyE.detail ?? 0;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
-    this.onCheckDebounce();
+    // no snap on wheel; let inertia settle naturally
   };
 
   onCheck() {
@@ -565,12 +582,12 @@ class App {
 
 export default function Gallery({
   items,
-  bend = 3,
+  bend = 2,
   textColor = '#ffffff',
-  borderRadius = 0.05,
+  borderRadius = 0.12,
   font = 'bold 26px system-ui',
-  scrollSpeed = 2,
-  scrollEase = 0.05,
+  scrollSpeed = 1.6,
+  scrollEase = 0.12,
   onIndexChange,
 }: CircularGalleryProps) {
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement | null>;
@@ -578,7 +595,6 @@ export default function Gallery({
   useEffect(() => {
     if (!ref.current) return;
 
-    // Graceful guard for WebGL init failures
     let app: App | null = null;
     try {
       app = new App(ref.current, {
@@ -592,7 +608,6 @@ export default function Gallery({
         onIndexChange,
       });
     } catch (err) {
-      // Do not crash the app; leave an empty container (or you can add a small text fallback)
       console.error('Gallery WebGL init failed:', err);
       app = null;
     }
