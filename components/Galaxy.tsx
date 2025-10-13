@@ -133,7 +133,7 @@ export default function Galaxy({
   twinkleIntensity = 0.20, // ↑ gentle twinkle
   rotationSpeed = 0.018,
   drift = 0.9,             // forward travel
-  exposure = 1.35,         // NEW
+  exposure = 2,         // NEW
   mouseInteraction = true,
   disableAnimation = false,
   className = "",
