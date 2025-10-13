@@ -1,34 +1,55 @@
 .circular-gallery {
   width: 100%;
-  height: 560px; /* adjusts with container */
+  height: 660px; /* taller for calmer motion & readability */
   overflow: hidden;
   cursor: grab;
   position: relative;
   isolation: isolate;
+  border-radius: 16px;
+  background: radial-gradient(1000px 400px at 50% 0%,
+      rgba(255, 149, 8, 0.07),
+      transparent 55%);
 }
 
 .circular-gallery:active {
   cursor: grabbing;
 }
 
-/* orange edge glow masks */
+/* subtle edge glows */
 .circular-gallery::before,
 .circular-gallery::after {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 88px;
+  width: 64px;
   pointer-events: none;
   z-index: 1;
 }
 
 .circular-gallery::before {
   left: 0;
-  background: linear-gradient(to right, rgba(255, 78, 0, 0.15), transparent 60%);
+  background: linear-gradient(to right, rgba(255, 78, 0, 0.08), transparent 60%);
 }
 
 .circular-gallery::after {
   right: 0;
-  background: linear-gradient(to left, rgba(255, 78, 0, 0.15), transparent 60%);
+  background: linear-gradient(to left, rgba(255, 78, 0, 0.08), transparent 60%);
+}
+
+/* Phase chip inside gallery, top-left */
+.gallery-phase-chip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 9999px;
+  backdrop-filter: blur(2px);
 }
