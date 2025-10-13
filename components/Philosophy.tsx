@@ -8,7 +8,6 @@ type Props = {
   showVisual?: boolean;
   visualSrc?: string; // e.g. "/assets/trgs-covenant.svg"
   visualAlt?: string;
-  bookHref?: string;
   downloadHref?: string;
 };
 
