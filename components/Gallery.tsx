@@ -10,7 +10,7 @@ import { useEffect, useRef } from 'react';
 import type { MutableRefObject } from 'react';
 import { Camera, Mesh, Plane, Program, Renderer, Texture, Transform } from 'ogl';
 
-import './circular-gallery.css';
+import './Gallery.css';
 
 type GalleryItem = {
   image: string;
