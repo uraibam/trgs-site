@@ -13,8 +13,14 @@
 
 /* Smooth fonts on dark bg */
 html, body {
+  height: 100%;
   background: #000;
   color: #fff;
 }
-/* Ensure hero/starfield always occupies the section */
-section > .absolute { width:100%; height:100%; }
+
+/* Only target the hero's starfield container */
+.galaxy-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
