@@ -16,7 +16,7 @@ export default function Hero() {
         twinkleIntensity={0.22}
         starSpeed={0.22}
         speed={0.85}
-        rotationSpeed={0.03}
+        rotationSpeed={0.5}
         mouseInteraction
       />
 
