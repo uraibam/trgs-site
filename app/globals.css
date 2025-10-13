@@ -30,10 +30,22 @@ html, body {
   50%      { opacity: .62; }
 }
 
-/* Scroll cue bobbing animation */
-@keyframes cueBob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(6px); }
+/* Mouse wheel scroll cue */
+@keyframes wheel {
+  0% { transform: translate(-50%, 0); opacity: 1; }
+  60% { transform: translate(-50%, 8px); opacity: 0.2; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* Dust haze: ultra-light orange/purple fog, blended on top of stars */
+.dust-haze {
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.28; /* raise/lower for taste */
+  background:
+    radial-gradient(60% 40% at 50% 60%, rgba(255,120,0,0.10), rgba(0,0,0,0) 70%),
+    radial-gradient(50% 35% at 40% 45%, rgba(150,60,255,0.08), rgba(0,0,0,0) 70%),
+    radial-gradient(80% 60% at 60% 55%, rgba(255,90,0,0.06), rgba(0,0,0,0) 70%);
 }
 
 /* Respect reduced motion */
