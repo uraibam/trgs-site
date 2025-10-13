@@ -52,3 +52,30 @@ html, body {
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Cinematic vignette */
+.vignette {
+  background:
+    radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 85%, rgba(0,0,0,0.9) 100%);
+}
+
+/* Glow pulse behind wordmark */
+@keyframes pulse {
+  0%, 100% { opacity: .35; transform: scale(0.98); }
+  50%      { opacity: .55; transform: scale(1.02); }
+}
+.pulse { animation: pulse 3.6s ease-in-out infinite; }
+
+/* Scroll cue animation */
+@keyframes cue {
+  0%   { transform: translateY(0); opacity: .9; }
+  60%  { transform: translateY(6px); opacity: .35; }
+  100% { transform: translateY(0); opacity: .9; }
+}
+.scroll-cue svg { animation: cue 1.8s ease-in-out infinite; }
+
+/* Ensure absolute layers fill their section */
+section > .absolute, section > [style*="position: absolute"] {
+  width: 100%;
+  height: 100%;
+}
