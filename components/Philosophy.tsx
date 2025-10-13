@@ -85,18 +85,6 @@ export default function Philosophy({
               </p>
             </div>
 
-            /*<div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                href={bookHref}
-                className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5
-                           text-sm font-medium text-white ring-1 ring-white/15
-                           hover:bg-white/15 hover:ring-white/20 focus-visible:outline-none
-                           focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-black
-                           focus-visible:ring-white/50 transition"
-              >
-                Book Amin
-              </Link>*/
-
               <Link
                 href={downloadHref}
                 prefetch={false}
