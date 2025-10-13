@@ -25,23 +25,23 @@ html, body {
   height: 100%;
 }
 
-/* Mouse wheel scroll cue 
+{/* Mouse wheel scroll cue 
 @keyframes wheel {
   0% { transform: translate(-50%, 0); opacity: 1; }
   60% { transform: translate(-50%, 8px); opacity: 0.2; }
   100% { transform: translate(-50%, 0); opacity: 1; }
-} */
+}*/}
 
-/* Dust haze: ultra-light orange/purple fog, blended on top of stars 
+{/*Dust haze: ultra-light orange/purple fog, blended on top of stars 
 .dust-haze {
   pointer-events: none;
   mix-blend-mode: screen;
-  opacity: 0.28; /* raise/lower for taste */
+  opacity: 0.28; /* raise/lower for taste 
   background:
     radial-gradient(60% 40% at 50% 60%, rgba(255,120,0,0.10), rgba(0,0,0,0) 70%),
     radial-gradient(50% 35% at 40% 45%, rgba(150,60,255,0.08), rgba(0,0,0,0) 70%),
     radial-gradient(80% 60% at 60% 55%, rgba(255,90,0,0.06), rgba(0,0,0,0) 70%);
-} */
+}*/}
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
@@ -54,12 +54,12 @@ html, body {
     radial-gradient(120% 120% at 50% 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.5) 85%, rgba(0,0,0,0.9) 100%);
 }
 
-/* Glow pulse behind wordmark 
+{/*Glow pulse behind wordmark 
 @keyframes pulse {
   0%, 100% { opacity: .35; transform: scale(0.98); }
   50%      { opacity: .55; transform: scale(1.02); }
 }
-.pulse { animation: pulse 3.6s ease-in-out infinite; } */
+.pulse { animation: pulse 3.6s ease-in-out infinite; }*/}
 
 /* Scroll cue animation */
 @keyframes cue {
