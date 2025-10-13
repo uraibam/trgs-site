@@ -58,7 +58,7 @@ export default function ProofSection() {
       aria-label="Proof"
       className="relative isolate"
     >
-      {/* Warm vignette that blends with the hero */}
+      {/* Warm vignette that blends with the hero 
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
@@ -66,7 +66,7 @@ export default function ProofSection() {
           background:
             "radial-gradient(1200px 420px at 50% 0%, rgba(255,78,0,0.10), rgba(0,0,0,0) 60%)",
         }}
-      />
+      />*/}
 
       <div className="mx-auto max-w-6xl px-6 sm:px-8 py-12 sm:py-14">
         {/* Logo Loop */}
