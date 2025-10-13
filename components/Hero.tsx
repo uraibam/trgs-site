@@ -1,42 +1,38 @@
-// components/Hero.tsx
 import Image from "next/image";
 import Galaxy from "./Galaxy";
 
 export default function Hero() {
   return (
     <div className="relative min-h-[100svh] overflow-hidden bg-black">
-      {/* Galaxy background */}
       <Galaxy className="absolute inset-0" />
 
-      {/* Radial vignette (edge fade to black for cinematic depth) */}
+      {/* Vignette for cinematic depth */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(120% 90% at 50% 50%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 55%, rgba(0,0,0,0.65) 80%, rgba(0,0,0,0.9) 100%)",
+            "radial-gradient(115% 85% at 50% 55%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,1) 100%)",
         }}
       />
 
-      {/* Content wrapper */}
       <div className="relative z-10 flex h-full flex-col items-center justify-center px-6">
-        {/* Soft bottom-right warm glow with pulse */}
+        {/* Subtle pulsing glow */}
         <div
           aria-hidden="true"
-          className="absolute -z-10 h-[40vh] w-[60vw] rounded-[999px] blur-3xl"
+          className="absolute -z-10 h-[45vh] w-[65vw] rounded-full blur-3xl"
           style={{
             bottom: "18%",
             left: "50%",
             transform: "translateX(-50%)",
             background:
-              "radial-gradient(50% 60% at 50% 50%, rgba(255,78,0,0.22) 0%, rgba(255,78,0,0.08) 60%, rgba(255,78,0,0) 100%)",
+              "radial-gradient(circle at 50% 50%, rgba(255,78,0,0.22) 0%, rgba(255,78,0,0.06) 60%, rgba(255,78,0,0) 100%)",
             animation: "pulseGlow 5s ease-in-out infinite",
           }}
         />
 
-        {/* Wordmark */}
         <Image
-          src="/wordmark_full.png" // your uploaded asset
+          src="/wordmark_full.png"
           alt="THE ROCKET GUY"
           width={1400}
           height={320}
@@ -47,7 +43,7 @@ export default function Hero() {
         {/* Scroll cue */}
         <a
           href="#proof"
-          className="group absolute bottom-6 md:bottom-8 inline-flex flex-col items-center gap-2 text-white/70 focus:outline-none"
+          className="group absolute bottom-6 md:bottom-8 inline-flex flex-col items-center gap-2 text-white/70"
           aria-label="Scroll to next section"
         >
           <svg
