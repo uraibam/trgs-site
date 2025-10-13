@@ -126,7 +126,7 @@ void main() {
 
 export default function Galaxy({
   density = 1.5,           // ↑ more stars
-  hueShift = 225,
+  hueShift = 270,
   speed = 0.7,
   glowIntensity = 0.28,    // ↑ visibility
   saturation = 0.48,
