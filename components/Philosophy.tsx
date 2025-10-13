@@ -85,7 +85,7 @@ export default function Philosophy({
               </p>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            /*<div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={bookHref}
                 className="inline-flex items-center gap-2 rounded-full bg-white/10 px-5 py-2.5
@@ -95,7 +95,7 @@ export default function Philosophy({
                            focus-visible:ring-white/50 transition"
               >
                 Book Amin
-              </Link>
+              </Link>*/
 
               <Link
                 href={downloadHref}
@@ -107,7 +107,7 @@ export default function Philosophy({
                            focus-visible:ring-offset-2 focus-visible:ring-offset-black
                            focus-visible:ring-white/50 transition"
               >
-                Download the Mini-framework
+                Download the Founder Mode Guide
               </Link>
             </div>
           </div>
