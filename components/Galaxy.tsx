@@ -125,13 +125,13 @@ void main() {
 `;
 
 export default function Galaxy({
-  density = 1.0,           // ↑ more stars
+  density = 1.5,           // ↑ more stars
   hueShift = 225,
   speed = 0.7,
   glowIntensity = 0.28,    // ↑ visibility
-  saturation = 0.18,
+  saturation = 0.48,
   twinkleIntensity = 0.20, // ↑ gentle twinkle
-  rotationSpeed = 0.018,
+  rotationSpeed = 0.5,
   drift = 0.9,             // forward travel
   exposure = 2,         // NEW
   mouseInteraction = true,
