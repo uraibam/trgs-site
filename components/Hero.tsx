@@ -20,7 +20,7 @@ export default function Hero() {
         mouseInteraction
       />
 
-      {/* DUST HAZE LAYER (blurred, lower density) */}
+      {/* DUST HAZE LAYER (blurred, lower density) 
       <Galaxy
         className="z-0"
         density={0.55}
@@ -33,7 +33,7 @@ export default function Hero() {
         mouseInteraction
         blurPx={10}
         opacity={0.38}
-      />
+      />*/}
 
       {/* VIGNETTE for infinite feel */}
       <div className="pointer-events-none absolute inset-0 z-10 vignette" />
