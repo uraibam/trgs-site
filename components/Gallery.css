@@ -1,0 +1,34 @@
+.circular-gallery {
+  width: 100%;
+  height: 560px; /* adjusts with container */
+  overflow: hidden;
+  cursor: grab;
+  position: relative;
+  isolation: isolate;
+}
+
+.circular-gallery:active {
+  cursor: grabbing;
+}
+
+/* orange edge glow masks */
+.circular-gallery::before,
+.circular-gallery::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 88px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.circular-gallery::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(255, 78, 0, 0.15), transparent 60%);
+}
+
+.circular-gallery::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(255, 78, 0, 0.15), transparent 60%);
+}
