@@ -60,7 +60,7 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: clamp(24px, 8%, 120px);
+  width: clamp(8px, 3%, 40px);
   pointer-events: none;
   z-index: 1;
 }
@@ -79,7 +79,7 @@
   background: linear-gradient(
     to left,
     var(--logoloop-fadeColor, var(--logoloop-fadeColorAuto)) 0%,
-    rgba(0, 0, 0, 0) 100%
+    rgba(0, 0, 0, 0) 70%
   );
 }
 
