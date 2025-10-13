@@ -41,8 +41,8 @@ export default function Hero() {
       {/* LOGO + subtle glow pulse */}
       <div className="absolute inset-0 z-20 flex items-center justify-center">
         <div className="relative">
-          {/* Warm glow pulse behind the logo */}
-          <div className="absolute -inset-24 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,78,0,0.22),rgba(0,0,0,0))] pulse" />
+          {/* Warm glow pulse behind the logo 
+          <div className="absolute -inset-24 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,78,0,0.22),rgba(0,0,0,0))] pulse" />*/}
           <Image
             src="/assets/wordmark_full.svg"
             alt="THE ROCKET GUY"
