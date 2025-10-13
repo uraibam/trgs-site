@@ -1,31 +1,42 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Gallery from './Gallery';
 import journey from '../content/journey.json';
 
+type Item = {
+  title: string;
+  caption: string;
+  image: string;
+  alt?: string;
+  placeholder?: boolean;
+};
 
-type Phase = { name: string; items: { title: string; caption: string; image: string; alt?: string; placeholder?: boolean }[] };
+type Phase = {
+  name: string;
+  items: Item[];
+};
 
-export default function SectionJourney() {
-  const phases = journey.phases as Phase[];
+export default function Journey() {
+  const phases = (journey as { phases: Phase[] }).phases;
+
+  // Flatten items for the Gallery input
   const flatItems = useMemo(
     () =>
-      phases.flatMap(p =>
-        p.items.map(i => ({
+      phases.flatMap((p) =>
+        p.items.map((i) => ({
           image: i.image,
           text: i.caption,
-          alt: i.alt || i.title
-        }))
+          alt: i.alt || i.title,
+        })),
       ),
-    [phases]
+    [phases],
   );
 
+  // Active tile index reported by Gallery (center snap)
   const [activeIndex, setActiveIndex] = useState(0);
-  const [seen, setSeen] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
 
-  // Map index to phase name
+  // Map a flat index to its phase name
   const indexToPhase = (idx: number) => {
     let count = 0;
     for (const p of phases) {
@@ -36,16 +47,18 @@ export default function SectionJourney() {
     return phases[phases.length - 1]?.name ?? '';
   };
 
-  const activePhase = indexToPhase(activeIndex);
+  const activePhase = useMemo(() => indexToPhase(activeIndex), [activeIndex, phases]);
+
+  const handleIndexChange = (i: number) => {
+    setActiveIndex(i);
+  };
 
   return (
-    <section id="journey" ref={sectionRef} className="relative bg-[var(--bg)] text-[var(--text)] py-16 md:py-24">
+    <section id="journey" className="relative bg-[var(--bg)] text-[var(--text)] py-16 md:py-24">
       <div className="mx-auto max-w-[1400px] px-6">
         <header className="mb-6 md:mb-8">
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Journey</h2>
-          <p className="mt-2 text-white/70 max-w-2xl">
-            Years and moments that shaped the TRGS approach.
-          </p>
+          <p className="mt-2 text-white/70 max-w-2xl">Years and moments that shaped the TRGS approach.</p>
           <div className="mt-3 inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-sm text-white/80">
             <span className="opacity-80">Phase:</span>
             <span className="ml-2 font-medium text-white">{activePhase}</span>
@@ -53,7 +66,7 @@ export default function SectionJourney() {
         </header>
 
         <div className="relative rounded-2xl border border-white/10 bg-white/[0.02] backdrop-blur-[1px]">
-          <CircularGallery
+          <Gallery
             items={flatItems}
             bend={3}
             textColor="#ffffff"
@@ -69,9 +82,9 @@ export default function SectionJourney() {
           {phases.map((p, pi) =>
             p.items.map((i, ii) => (
               <li key={`${pi}-${ii}`}>
-                {p.name} — {i.title}: {i.caption}
+                {p.name} - {i.title}: {i.caption}
               </li>
-            ))
+            )),
           )}
         </ul>
       </div>
