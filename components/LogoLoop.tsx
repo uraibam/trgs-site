@@ -170,7 +170,7 @@ const useAnimationLoop = (
 const LogoLoop = memo((props: Props) => {
   const {
     logos,
-    speed = 10, // subtle premium default
+    speed = 40, // subtle premium default
     direction = "left",
     width = "100%",
     logoHeight = 32,
