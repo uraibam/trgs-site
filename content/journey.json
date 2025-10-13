@@ -1,0 +1,135 @@
+{
+  "phases": [
+    {
+      "name": "The Spark",
+      "items": [
+        {
+          "title": "Age 10: First business",
+          "caption": "Age 10: first business → solved a real problem.",
+          "image": "/journey/age10.png",
+          "alt": "Childhood photo symbolizing first business at age 10."
+        },
+        {
+          "title": "Age 12: Intel dream",
+          "caption": "Age 12: a home PC sparked a vow → build work worthy of Intel.",
+          "image": "/journey/age12.png",
+          "alt": "First home PC inspiring a goal to reach Intel standards."
+        }
+      ]
+    },
+    {
+      "name": "The Hustle",
+      "items": [
+        {
+          "title": "Korangi factory",
+          "caption": "Age 13: garment factory in Korangi → against the grain.",
+          "image": "/journey/age13.jpg",
+          "alt": "Garment factory floor in Korangi."
+        },
+        {
+          "title": "Solo migration plan",
+          "caption": "Age 14: planned a solo migration.",
+          "image": "/journey/age14.jpg",
+          "alt": "Planning materials and maps for a solo migration."
+        },
+        {
+          "title": "Fatherhood at 19",
+          "caption": "Age 19: fatherhood → stakes shift from personal to generational.",
+          "image": "/journey/age19.jpg",
+          "alt": "Symbolic image of early fatherhood."
+        },
+        {
+          "title": "Quit ACCA, built a practice",
+          "caption": "Quit ACCA; built a tax practice for doctors and taxi drivers.",
+          "image": "/journey/acca.jpg",
+          "alt": "Documents and calculator representing a small tax practice."
+        }
+      ]
+    },
+    {
+      "name": "The Fire & the Falls",
+      "items": [
+        {
+          "title": "Fatherhood at 22",
+          "caption": "Age 22: fatherhood again → doubled responsibility.",
+          "image": "/journey/age22.jpg",
+          "alt": "Symbolic image for responsibility and fatherhood."
+        },
+        {
+          "title": "Marriage ended",
+          "caption": "Marriage ended → rebuilt systems and self.",
+          "image": "/journey/marriage.jpg",
+          "alt": "A quiet scene representing an ending and reset."
+        },
+        {
+          "title": "CIPD admission, exit",
+          "caption": "Admitted to NCI HRM (CIPD) without a bachelor’s; left → thesis or truth.",
+          "image": "/journey/dropout.jpg",
+          "alt": "College materials representing admission and exit."
+        }
+      ]
+    },
+    {
+      "name": "The Engineering of Dreams",
+      "items": [
+        {
+          "title": "Engineering degree",
+          "caption": "Graduated in Electronic and Computer Engineering; Intel set the bar at home.",
+          "image": "/journey/intel.jpg",
+          "alt": "Graduation or engineering themed image."
+        },
+        {
+          "title": "Parents at Intel",
+          "caption": "Parents at Intel set a standard for craft and rigor.",
+          "image": "/journey/parents.jpg",
+          "alt": "Parents connected to Intel, symbolizing high standards.",
+          "placeholder": true
+        },
+        {
+          "title": "Integnix (BPO)",
+          "caption": "Launched Integnix (BPO) for global clients → process before promises.",
+          "image": "/journey/integnix.png",
+          "alt": "Integnix logo."
+        },
+        {
+          "title": "Seafood King",
+          "caption": "Built Seafood King → cold chain, ops, margins learned hands-on.",
+          "image": "/journey/seafoodking.jpg",
+          "alt": "Seafood King operations.",
+          "placeholder": false
+        }
+      ]
+    },
+    {
+      "name": "The Phoenix Era",
+      "items": [
+        {
+          "title": "Found love again",
+          "caption": "Found love again → softness with steel.",
+          "image": "/journey/love.jpg",
+          "alt": "A moment symbolizing found love."
+        },
+        {
+          "title": "TRGS is born",
+          "caption": "TRGS began as a covenant for the 3%.",
+          "image": "/journey/trgs.jpg",
+          "alt": "Early TRGS moment or mark.",
+          "placeholder": false
+        },
+        {
+          "title": "Father again",
+          "caption": "Age 37: became a father again → this time with perspective.",
+          "image": "/journey/placeholder-father.jpg",
+          "alt": "Respectful placeholder for a private family moment.",
+          "placeholder": true
+        },
+        {
+          "title": "Beyond Mars",
+          "caption": "Now, beyond Mars → systems for builders who stretch the frontier.",
+          "image": "/journey/mars.jpg",
+          "alt": "Mars and a rocket, symbolizing frontier building."
+        }
+      ]
+    }
+  ]
+}
