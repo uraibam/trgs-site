@@ -1,75 +1,71 @@
-import Image from "next/image";
-import Galaxy from "./Galaxy";
+// components/Hero.tsx
+'use client';
+
+import Image from 'next/image';
+import Galaxy from './Galaxy';
 
 export default function Hero() {
   return (
-    <div className="relative min-h-[100svh] overflow-hidden bg-black">
-      <Galaxy className="absolute inset-0" />
-
-      {/* Vignette for cinematic depth */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(115% 85% at 50% 55%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.7) 85%, rgba(0,0,0,1) 100%)",
-        }}
+    <section className="relative min-h-[100svh] overflow-hidden">
+      {/* BACK STARFIELD (main) */}
+      <Galaxy
+        className="z-0"
+        density={1.15}
+        glowIntensity={0.48}
+        saturation={0.78}
+        twinkleIntensity={0.22}
+        starSpeed={0.22}
+        speed={0.85}
+        rotationSpeed={0.03}
+        mouseInteraction
       />
 
-      <div className="relative z-10 flex h-full flex-col items-center justify-center px-6">
-        {/* Subtle pulsing glow */}
-        <div
-          aria-hidden="true"
-          className="absolute -z-10 h-[45vh] w-[65vw] rounded-full blur-3xl"
-          style={{
-            bottom: "18%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            background:
-              "radial-gradient(circle at 50% 50%, rgba(255,78,0,0.22) 0%, rgba(255,78,0,0.06) 60%, rgba(255,78,0,0) 100%)",
-            animation: "pulseGlow 5s ease-in-out infinite",
-          }}
-        />
+      {/* DUST HAZE LAYER (blurred, lower density) */}
+      <Galaxy
+        className="z-0"
+        density={0.55}
+        glowIntensity={0.60}
+        saturation={0.35}
+        twinkleIntensity={0.18}
+        starSpeed={0.16}
+        speed={0.65}
+        rotationSpeed={0.02}
+        mouseInteraction
+        blurPx={10}
+        opacity={0.38}
+      />
 
-        <Image
-          src="assets/wordmark_full.png"
-          alt="THE ROCKET GUY"
-          width={1400}
-          height={320}
-          priority
-          className="w-[min(88vw,1200px)] h-auto select-none"
-        />
+      {/* VIGNETTE for infinite feel */}
+      <div className="pointer-events-none absolute inset-0 z-10 vignette" />
 
-        {/* Scroll cue */}
-        <a
-          href="#proof"
-          className="group absolute bottom-6 md:bottom-8 inline-flex flex-col items-center gap-2 text-white/70"
-          aria-label="Scroll"
-        >
-          <div className="relative h-6 w-4 rounded-full border border-white/60">
-            <div
-              className="absolute left-1/2 h-1.5 w-[2px] -translate-x-1/2 bg-white/70"
-              style={{ top: "5px", animation: "wheel 1.8s ease-in-out infinite" }}
-            />
-          </div>
-          <span className="text-xs tracking-wide opacity-80 group-hover:opacity-100">
-            Scroll
-          </span>
-          <svg
-            className="h-4 w-4 opacity-70 group-hover:opacity-100"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{ animation: "cueBob 2.2s ease-in-out infinite" }}
-          >
-            <path d="M6 9l6 6 6-6" />
-          </svg>
-          <span className="text-xs tracking-wide">Scroll</span>
-        </a>
+      {/* LOGO + subtle glow pulse */}
+      <div className="absolute inset-0 z-20 flex items-center justify-center">
+        <div className="relative">
+          {/* Warm glow pulse behind the logo */}
+          <div className="absolute -inset-24 rounded-full bg-[radial-gradient(ellipse_at_center,rgba(255,78,0,0.22),rgba(0,0,0,0))] pulse" />
+          <Image
+            src="/assets/wordmark_full.svg"
+            alt="THE ROCKET GUY"
+            width={1200}
+            height={300}
+            priority
+            className="relative w-[min(78vw,1100px)] h-auto select-none"
+          />
+        </div>
       </div>
-    </div>
+
+      {/* Scroll cue */}
+      <a
+        href="#proof"
+        aria-label="Scroll to next section"
+        className="absolute z-30 left-1/2 -translate-x-1/2 bottom-6 scroll-cue"
+      >
+        <span className="sr-only">Scroll</span>
+        <svg width="22" height="36" viewBox="0 0 22 36" aria-hidden="true">
+          <rect x="1" y="1" width="20" height="34" rx="10" stroke="white" fill="none" opacity="0.5"/>
+          <circle cx="11" cy="9" r="3" fill="white" />
+        </svg>
+      </a>
+    </section>
   );
 }
