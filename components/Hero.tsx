@@ -10,8 +10,8 @@ export default function Hero() {
       {/* BACK STARFIELD (main) */}
       <Galaxy
         className="z-0"
-        density={1.5}
-        glowIntensity={0.48}
+        density={2.5}
+        glowIntensity={0.68}
         saturation={0.78}
         twinkleIntensity={0.3}
         starSpeed={0.5}
