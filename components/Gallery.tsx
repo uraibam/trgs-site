@@ -2,8 +2,7 @@
 
 /**
  * Circular Gallery - TRGS Journey Reel
- * Based on the React Bits concept. Reimplemented with OGL for parity.
- * Attribution: concept inspired by React Bits - Circular Gallery by daviddvdev.
+ * Concept parity with React Bits Circular Gallery (attribution in comments only).
  */
 
 import { useEffect, useRef } from 'react';
@@ -14,18 +13,18 @@ import './Gallery.css';
 
 type GalleryItem = {
   image: string;
-  text: string;   // short caption under the tile
+  text: string; // short caption under the tile
   alt?: string;
 };
 
 export type CircularGalleryProps = {
   items: GalleryItem[];
-  bend?: number;           // curvature intensity
+  bend?: number; // curvature intensity
   textColor?: string;
-  borderRadius?: number;   // 0..0.2 approx
-  font?: string;           // canvas text font
-  scrollSpeed?: number;    // how fast wheel maps to horizontal
-  scrollEase?: number;     // lerp factor
+  borderRadius?: number; // 0..0.2 approx
+  font?: string; // canvas text font
+  scrollSpeed?: number; // how fast wheel maps to horizontal
+  scrollEase?: number; // lerp factor
   onIndexChange?: (index: number) => void; // emit when snap lands on new center
 };
 
@@ -41,15 +40,29 @@ function lerp(p1: number, p2: number, t: number) {
   return p1 + (p2 - p1) * t;
 }
 
-function createTextTexture(gl: WebGLRenderingContext, text: string, font = 'bold 26px system-ui', color = '#ffffff') {
+// robust font size parsing (handles "bold 26px system-ui", etc.)
+function getFontPx(font: string, fallback = 26) {
+  const m = /(\d+)\s*px/i.exec(font);
+  return m ? parseInt(m[1], 10) : fallback;
+}
+
+function createTextTexture(
+  gl: WebGLRenderingContext,
+  text: string,
+  font = 'bold 26px system-ui',
+  color = '#ffffff'
+) {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d')!;
+  const px = getFontPx(font, 26);
   ctx.font = font;
   const metrics = ctx.measureText(text);
   const textWidth = Math.ceil(metrics.width);
-  const textHeight = Math.ceil(parseInt(font, 10) * 1.2);
+  const textHeight = Math.ceil(px * 1.2);
+
   canvas.width = textWidth + 24;
   canvas.height = textHeight + 20;
+
   const c2 = canvas.getContext('2d')!;
   c2.font = font;
   c2.fillStyle = color;
@@ -57,6 +70,7 @@ function createTextTexture(gl: WebGLRenderingContext, text: string, font = 'bold
   c2.textAlign = 'center';
   c2.clearRect(0, 0, canvas.width, canvas.height);
   c2.fillText(text, canvas.width / 2, canvas.height / 2);
+
   const texture = new Texture(gl, { generateMipmaps: false });
   texture.image = canvas;
   return { texture, width: canvas.width, height: canvas.height };
@@ -70,7 +84,19 @@ class Title {
   font: string;
   mesh!: Mesh;
 
-  constructor({ gl, plane, text, textColor, font }: { gl: WebGLRenderingContext; plane: Mesh; text: string; textColor: string; font: string; }) {
+  constructor({
+    gl,
+    plane,
+    text,
+    textColor,
+    font,
+  }: {
+    gl: WebGLRenderingContext;
+    plane: Mesh;
+    text: string;
+    textColor: string;
+    font: string;
+  }) {
     this.gl = gl;
     this.plane = plane;
     this.text = text;
@@ -80,7 +106,12 @@ class Title {
   }
 
   createMesh() {
-    const { texture, width, height } = createTextTexture(this.gl, this.text, this.font, this.textColor);
+    const { texture, width, height } = createTextTexture(
+      this.gl,
+      this.text,
+      this.font,
+      this.textColor
+    );
     const geometry = new Plane(this.gl);
     const program = new Program(this.gl, {
       vertex: `
@@ -105,7 +136,7 @@ class Title {
         }
       `,
       uniforms: { tMap: { value: texture } },
-      transparent: true
+      transparent: true,
     });
     this.mesh = new Mesh(this.gl, { geometry, program });
     const aspect = width / height;
@@ -164,7 +195,8 @@ class Media {
     this.createShader();
     this.createMesh();
     this.createTitle(opts.caption);
-    this.onResize();
+    // Pass real sizes on first call to avoid destructure errors
+    this.onResize({ screen: this.screen, viewport: this.viewport });
   }
 
   createShader() {
@@ -184,7 +216,7 @@ class Media {
         void main() {
           vUv = uv;
           vec3 p = position;
-          // very subtle z wobble, tied to scroll speed
+          // subtle z wobble tied to scroll speed
           p.z = (sin(p.x * 4.0 + uTime) * 1.2 + cos(p.y * 2.0 + uTime) * 1.2) * (0.08 + uSpeed * 0.4);
           gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
         }
@@ -226,14 +258,13 @@ class Media {
         uImageSizes: { value: [0, 0] },
         uSpeed: { value: 0 },
         uTime: { value: 100 * Math.random() },
-        uBorderRadius: { value: this.borderRadius }
+        uBorderRadius: { value: this.borderRadius },
       },
-      transparent: true
+      transparent: true,
     });
 
     const img = new Image();
-    img.crossOrigin = 'anonymous';
-    img.src = this.image;
+    img.src = this.image; // same-origin: /public/journey/*
     img.onload = () => {
       texture.image = img;
       this.program.uniforms.uImageSizes.value = [img.naturalWidth, img.naturalHeight];
@@ -251,7 +282,7 @@ class Media {
       plane: this.plane,
       text: caption,
       textColor: this.textColor,
-      font: this.font
+      font: this.font,
     });
   }
 
@@ -298,20 +329,21 @@ class Media {
   }
 
   onResize(payload?: {
-  screen?: { width: number; height: number };
-  viewport?: { width: number; height: number };
-}) {
-  if (payload?.screen) this.screen = payload.screen;
-  if (payload?.viewport) this.viewport = payload.viewport;
+    screen?: { width: number; height: number };
+    viewport?: { width: number; height: number };
+  }) {
+    if (payload?.screen) this.screen = payload.screen;
+    if (payload?.viewport) this.viewport = payload.viewport;
 
-  const scale = this.screen.height / 1500;
-  this.plane.scale.y = (this.viewport.height * (900 * scale)) / this.screen.height;
-  this.plane.scale.x = (this.viewport.width * (700 * scale)) / this.screen.width;
-  this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
-  this.padding = 2;
-  this.width = this.plane.scale.x + this.padding;
-  this.widthTotal = this.width * this.length;
-  this.x = this.width * this.index;
+    const scale = this.screen.height / 1500;
+    this.plane.scale.y = (this.viewport.height * (900 * scale)) / this.screen.height;
+    this.plane.scale.x = (this.viewport.width * (700 * scale)) / this.screen.width;
+    this.plane.program.uniforms.uPlaneSizes.value = [this.plane.scale.x, this.plane.scale.y];
+    this.padding = 2;
+    this.width = this.plane.scale.x + this.padding;
+    this.widthTotal = this.width * this.length;
+    this.x = this.width * this.index;
+  }
 }
 
 class App {
@@ -354,7 +386,7 @@ class App {
       font = 'bold 26px system-ui',
       scrollSpeed = 2,
       scrollEase = 0.05,
-      onIndexChange
+      onIndexChange,
     }: {
       items: { image: string; text: string; alt?: string }[];
       bend?: number;
@@ -388,7 +420,11 @@ class App {
   }
 
   createRenderer() {
-    this.renderer = new Renderer({ alpha: true, antialias: true, dpr: Math.min(window.devicePixelRatio || 1, 2) });
+    this.renderer = new Renderer({
+      alpha: true,
+      antialias: true,
+      dpr: Math.min(window.devicePixelRatio || 1, 2),
+    });
     this.gl = this.renderer.gl as unknown as WebGLRenderingContext;
     this.gl.clearColor(0, 0, 0, 0);
     this.container.appendChild(this.gl.canvas);
@@ -425,7 +461,7 @@ class App {
         textColor: this.textColor,
         borderRadius: this.borderRadius,
         font: this.font,
-        caption: data.text
+        caption: data.text,
       });
     });
   }
@@ -433,12 +469,18 @@ class App {
   onTouchDown = (e: MouseEvent | TouchEvent) => {
     this.isDown = true;
     this.scroll.position = this.scroll.current;
-    this.start = (e as TouchEvent).touches ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+    this.start =
+      (e as TouchEvent).touches?.[0]?.clientX ??
+      (e as MouseEvent).clientX ??
+      0;
   };
 
   onTouchMove = (e: MouseEvent | TouchEvent) => {
     if (!this.isDown) return;
-    const x = (e as TouchEvent).touches ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+    const x =
+      (e as TouchEvent).touches?.[0]?.clientX ??
+      (e as MouseEvent).clientX ??
+      0;
     const distance = (this.start - x) * (this.scrollSpeed * 0.025);
     this.scroll.target = this.scroll.position + distance;
   };
@@ -449,7 +491,8 @@ class App {
   };
 
   onWheel = (e: WheelEvent) => {
-    const delta = e.deltaY || (e as any).wheelDelta || (e as any).detail;
+    const anyE = e as unknown as { wheelDelta?: number; detail?: number };
+    const delta = e.deltaY ?? anyE.wheelDelta ?? anyE.detail ?? 0;
     this.scroll.target += (delta > 0 ? this.scrollSpeed : -this.scrollSpeed) * 0.2;
     this.onCheckDebounce();
   };
@@ -467,7 +510,10 @@ class App {
   }
 
   onResize = () => {
-    this.screen = { width: this.container.clientWidth, height: this.container.clientHeight };
+    this.screen = {
+      width: this.container.clientWidth,
+      height: this.container.clientHeight,
+    };
     this.renderer.setSize(this.screen.width, this.screen.height);
     this.camera.perspective({ aspect: this.screen.width / this.screen.height });
 
@@ -476,13 +522,16 @@ class App {
     const width = height * this.camera.aspect;
     this.viewport = { width, height };
 
-    if (this.medias) this.medias.forEach(m => m.onResize({ screen: this.screen, viewport: this.viewport }));
+    if (this.medias)
+      this.medias.forEach((m) =>
+        m.onResize({ screen: this.screen, viewport: this.viewport })
+      );
   };
 
   update = () => {
     this.scroll.current = lerp(this.scroll.current, this.scroll.target, this.scroll.ease);
     const direction = this.scroll.current > this.scroll.last ? 'right' : 'left';
-    if (this.medias) this.medias.forEach(m => m.update(this.scroll, direction));
+    if (this.medias) this.medias.forEach((m) => m.update(this.scroll, direction));
     this.renderer.render({ scene: this.scene, camera: this.camera });
     this.scroll.last = this.scroll.current;
     this.raf = window.requestAnimationFrame(this.update);
@@ -490,32 +539,31 @@ class App {
 
   addEventListeners() {
     window.addEventListener('resize', this.onResize);
-    window.addEventListener('wheel', this.onWheel, { passive: true });
-    window.addEventListener('mousedown', this.onTouchDown);
-    window.addEventListener('mousemove', this.onTouchMove);
-    window.addEventListener('mouseup', this.onTouchUp);
-    window.addEventListener('touchstart', this.onTouchDown, { passive: true });
-    window.addEventListener('touchmove', this.onTouchMove, { passive: true });
-    window.addEventListener('touchend', this.onTouchUp);
+    window.addEventListener('wheel', this.onWheel as EventListener, { passive: true });
+    window.addEventListener('mousedown', this.onTouchDown as EventListener);
+    window.addEventListener('mousemove', this.onTouchMove as EventListener);
+    window.addEventListener('mouseup', this.onTouchUp as EventListener);
+    window.addEventListener('touchstart', this.onTouchDown as EventListener, { passive: true });
+    window.addEventListener('touchmove', this.onTouchMove as EventListener, { passive: true });
+    window.addEventListener('touchend', this.onTouchUp as EventListener);
   }
 
   destroy() {
     window.cancelAnimationFrame(this.raf);
     window.removeEventListener('resize', this.onResize);
-    window.removeEventListener('wheel', this.onWheel);
-    window.removeEventListener('mousedown', this.onTouchDown);
-    window.removeEventListener('mousemove', this.onTouchMove);
-    window.removeEventListener('mouseup', this.onTouchUp);
-    window.removeEventListener('touchstart', this.onTouchDown);
-    window.removeEventListener('touchmove', this.onTouchMove);
-    window.removeEventListener('touchend', this.onTouchUp);
-    if (this.renderer && this.renderer.gl && (this.renderer.gl as any).canvas.parentNode) {
-      (this.renderer.gl as any).canvas.parentNode.removeChild((this.renderer.gl as any).canvas);
-    }
+    window.removeEventListener('wheel', this.onWheel as EventListener);
+    window.removeEventListener('mousedown', this.onTouchDown as EventListener);
+    window.removeEventListener('mousemove', this.onTouchMove as EventListener);
+    window.removeEventListener('mouseup', this.onTouchUp as EventListener);
+    window.removeEventListener('touchstart', this.onTouchDown as EventListener);
+    window.removeEventListener('touchmove', this.onTouchMove as EventListener);
+    window.removeEventListener('touchend', this.onTouchUp as EventListener);
+    const canvas = (this.renderer?.gl as any)?.canvas as HTMLCanvasElement | undefined;
+    canvas?.parentNode?.removeChild(canvas);
   }
 }
 
-export default function CircularGallery({
+export default function Gallery({
   items,
   bend = 3,
   textColor = '#ffffff',
@@ -523,23 +571,32 @@ export default function CircularGallery({
   font = 'bold 26px system-ui',
   scrollSpeed = 2,
   scrollEase = 0.05,
-  onIndexChange
+  onIndexChange,
 }: CircularGalleryProps) {
   const ref = useRef<HTMLDivElement>(null) as MutableRefObject<HTMLDivElement | null>;
 
   useEffect(() => {
     if (!ref.current) return;
-    const app = new App(ref.current, {
-      items,
-      bend,
-      textColor,
-      borderRadius,
-      font,
-      scrollSpeed,
-      scrollEase,
-      onIndexChange
-    });
-    return () => app.destroy();
+
+    // Graceful guard for WebGL init failures
+    let app: App | null = null;
+    try {
+      app = new App(ref.current, {
+        items,
+        bend,
+        textColor,
+        borderRadius,
+        font,
+        scrollSpeed,
+        scrollEase,
+        onIndexChange,
+      });
+    } catch (err) {
+      // Do not crash the app; leave an empty container (or you can add a small text fallback)
+      console.error('Gallery WebGL init failed:', err);
+      app = null;
+    }
+    return () => app?.destroy();
   }, [items, bend, textColor, borderRadius, font, scrollSpeed, scrollEase, onIndexChange]);
 
   return <div className="circular-gallery" ref={ref} aria-label="Circular journey gallery" />;
