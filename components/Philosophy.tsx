@@ -15,7 +15,6 @@ export default function Philosophy({
   showVisual = false,
   visualSrc,
   visualAlt = '',
-  bookHref = '/#book-amin',
   downloadHref = '/assets/founder-vs-manager.pdf',
 }: Props) {
   const prefersReduced = useReducedMotion();
@@ -83,7 +82,7 @@ export default function Philosophy({
                 of meaning.
               </p>
             </div>
-
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href={downloadHref}
                 prefetch={false}
