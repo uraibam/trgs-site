@@ -131,8 +131,8 @@ export default function Galaxy({
   glowIntensity = 0.28,    // ↑ visibility
   saturation = 0.48,
   twinkleIntensity = 0.20, // ↑ gentle twinkle
-  rotationSpeed = 0.5,
-  drift = 0.9,             // forward travel
+  rotationSpeed = 0.8,
+  drift = 1,             // forward travel
   exposure = 2,         // NEW
   mouseInteraction = true,
   disableAnimation = false,
