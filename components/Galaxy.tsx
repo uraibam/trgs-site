@@ -175,20 +175,20 @@ export default function Galaxy({
   focal = [0.5, 0.5],
   rotation = [1.0, 0.0],
   starSpeed = 0.12,       // gentle, continuous
-  density = 0.62,         // uncluttered
+  density = 0.85,         // uncluttered
   hueShift = 220,         // cool space tone
   disableAnimation = false,
   speed = 0.65,
   mouseInteraction = true,
   glowIntensity = 0.36,
-  saturation = 0.15,
+  saturation = 0.35,
   mouseRepulsion = false, // parallax-based default
   repulsionStrength = 1.2,
   twinkleIntensity = 0.12,
-  rotationSpeed = 0.15,  // slow camera spin
+  rotationSpeed = 0.35,  // slow camera spin
   autoCenterRepulsion = 0.0,
   transparent = true,
-  drift = 0.55,           // forward travel feel
+  drift = 0.75,           // forward travel feel
   className = '',
 }: Props) {
   const container = useRef<HTMLDivElement | null>(null);
