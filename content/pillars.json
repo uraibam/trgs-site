@@ -1,0 +1,36 @@
+{
+  "title": "The TRGS Stack",
+  "subhead": "Systems that power the 3% → from diagnosis to scale.",
+  "cards": [
+    {
+      "title": "3% Founder Mode Stack",
+      "oneLiner": "Diagnose with the FFI. Install with the 112-day Companion. Keep score with the AI Agent.",
+      "icon": "layers"
+    },
+    {
+      "title": "OKRs as a Philosophy",
+      "oneLiner": "We don’t install dashboards; we embed clarity.",
+      "icon": "target"
+    },
+    {
+      "title": "TRGS Ignition: CSO-as-a-Service",
+      "oneLiner": "Your strategic co-pilot from spark to scale to orbit.",
+      "icon": "rocket"
+    },
+    {
+      "title": "TRGS On-Demand",
+      "oneLiner": "Keynotes, workshops, firesides, and C-suite coaching.",
+      "icon": "briefcase"
+    },
+    {
+      "title": "TRGS Tribe & Experiences",
+      "oneLiner": "A private circle for the 3%. Monthly SOCH Nights to SOCH Grande.",
+      "icon": "users"
+    },
+    {
+      "title": "TRGS Academy",
+      "oneLiner": "Open lessons for the civic side of TRGS.",
+      "icon": "book-open"
+    }
+  ]
+}
