@@ -2,36 +2,18 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import {
-  Layers as LayersIcon,
-  Target as TargetIcon,
-  Rocket as RocketIcon,
-  Briefcase as BriefcaseIcon,
-  Users as UsersIcon,
-  BookOpen as BookOpenIcon,
-} from 'lucide-react';
-
 import data from '../content/pillars.json';
 
 type PillarCard = {
   title: string;
   oneLiner: string;
-  icon: string; // lucide key
+  icon?: string; // ignored (iconless)
 };
 
 type PillarsData = {
   title: string;
   subhead: string;
   cards: PillarCard[];
-};
-
-const iconMap: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
-  layers: LayersIcon,
-  target: TargetIcon,
-  rocket: RocketIcon,
-  briefcase: BriefcaseIcon,
-  users: UsersIcon,
-  'book-open': BookOpenIcon,
 };
 
 export default function Pillars() {
@@ -55,18 +37,14 @@ export default function Pillars() {
     };
 
     const onWheel = (e: WheelEvent) => {
-      if (!hijackWheel) return; // let normal vertical scroll happen
-      // if horizontal intent already, do nothing
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-      // convert vertical wheel to horizontal movement within the strip
+      if (!hijackWheel) return; // allow normal page scroll
+      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return; // already horizontal
       e.preventDefault();
       el.scrollBy({ left: e.deltaY, behavior: 'smooth' });
     };
 
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'End' || e.key === 'Escape') {
-        setHijackWheel(false);
-      }
+      if (e.key === 'End' || e.key === 'Escape') setHijackWheel(false);
     };
 
     el.addEventListener('scroll', onScroll, { passive: true });
@@ -99,7 +77,7 @@ export default function Pillars() {
           >
             {title}
           </h2>
-          <p className="mt-1 text-white/70 max-w-2xl">{subhead}</p>
+        <p className="mt-1 text-white/70 max-w-2xl">{subhead}</p>
         </header>
 
         <div className="relative rounded-2xl border border-white/10 bg-white/[0.02]">
@@ -130,42 +108,33 @@ export default function Pillars() {
             style={{ WebkitOverflowScrolling: 'touch' }}
             aria-label="TRGS Stack filmstrip"
           >
-            {safeCards.map((card, idx) => {
-              const Icon =
-                iconMap[card.icon] ?? ((props) => <LayersIcon {...props} />);
-              return (
-                <motion.article
-                  key={`${card.title}-${idx}`}
-                  className="snap-center shrink-0 w-[280px] md:w-[320px] lg:w-[360px]"
-                  whileHover={
-                    prefersReduced ? undefined : { scale: 1.02, translateY: -4 }
-                  }
-                  transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-                >
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:p-6 h-full">
-                    <div className="flex items-center gap-3">
-                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/[0.06] ring-1 ring-white/10">
-                        <Icon className="h-4 w-4 text-white/70" aria-hidden />
-                      </span>
-                      <h3 className="text-lg md:text-xl font-medium tracking-tight">
-                        {card.title}
-                      </h3>
-                    </div>
+            {safeCards.map((card, idx) => (
+              <motion.article
+                key={`${card.title}-${idx}`}
+                className="snap-center shrink-0 w-[280px] md:w-[320px] lg:w-[360px]"
+                whileHover={
+                  prefersReduced ? undefined : { scale: 1.02, translateY: -4 }
+                }
+                transition={{ type: 'spring', stiffness: 260, damping: 24 }}
+              >
+                <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:p-6 h-full">
+                  <h3 className="text-lg md:text-xl font-medium tracking-tight">
+                    {card.title}
+                  </h3>
 
-                    {/* Abstract gradient tile */}
-                    <div
-                      aria-hidden
-                      className="mt-5 h-36 md:h-40 rounded-xl ring-1 ring-white/10
-                                 bg-[radial-gradient(100%_80%_at_50%_10%,rgba(255,149,8,0.18),transparent_60%)]"
-                    />
+                  {/* Abstract gradient tile (media placeholder) */}
+                  <div
+                    aria-hidden
+                    className="mt-5 h-36 md:h-40 rounded-xl ring-1 ring-white/10
+                               bg-[radial-gradient(100%_80%_at_50%_10%,rgba(255,149,8,0.18),transparent_60%)]"
+                  />
 
-                    <p className="mt-4 text-sm md:text-base text-white/80 leading-relaxed">
-                      {card.oneLiner}
-                    </p>
-                  </div>
-                </motion.article>
-              );
-            })}
+                  <p className="mt-4 text-sm md:text-base text-white/80 leading-relaxed">
+                    {card.oneLiner}
+                  </p>
+                </div>
+              </motion.article>
+            ))}
           </div>
         </div>
 
