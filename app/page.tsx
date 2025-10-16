@@ -4,6 +4,7 @@ import Philosophy from '../components/Philosophy';
 import Journey from "../components/Journey";
 import Pillars from "../components/Pillars";
 import Conversations from "../components/Conversations";
+import Newsletter from "../components/Newsletter";
 
 export default function Page() {
   return (
@@ -15,6 +16,7 @@ export default function Page() {
       <Journey />
       <Pillars />
       <Conversations />
+      <Newsletter />
     </main>
   );
 }
