@@ -49,7 +49,7 @@ export default function Newsletter() {
 
                 <div className="mt-5">
                   <motion.a
-                    href={https://subscribepage.io/FounderConfessions}
+                    href={SUBSCRIBE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={prefersReduced ? undefined : { scale: 1.02, y: -2 }}
