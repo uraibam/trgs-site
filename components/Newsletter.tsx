@@ -67,7 +67,7 @@ export default function Newsletter() {
             </div>
           </div>
 
-          <div aria-hidden className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
+          <div aria-hidden className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
         </div>
       </div>
     </section>
