@@ -116,22 +116,20 @@ export default function Newsletter() {
               </div>
             </form>
           </div>
-
           {/* Right: photo (bleed) */}
-          <div className="relative overflow-hidden rounded-2xl border border-white/10">
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 min-h-[360px] md:min-h-[520px]">
             <Image
-              src="/assets/amin_newsletter.jpg"
+              src="/assets/amin_newsletter.png"   // <-- fixed path + extension
               alt="Amin — grayscale portrait"
-              width={1200}
-              height={1600}
+              fill
               sizes="(max-width: 768px) 100vw, 50vw"
-              className="h-full w-full object-cover grayscale"
+              className="object-cover grayscale"
               priority={false}
-            />
+              />
             <div
               aria-hidden
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_-10%,rgba(0,0,0,0),rgba(0,0,0,0.35))]"
-            />
+              />
           </div>
         </div>
       </div>
