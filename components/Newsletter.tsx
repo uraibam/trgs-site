@@ -26,7 +26,6 @@ export default function Newsletter() {
               sizes="(max-width: 768px) 100vw, 100vw"
               className="object-cover grayscale"
             />
-            {/* Left scrim for legibility */}
             <div
               aria-hidden
               className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/35 to-transparent"
@@ -40,14 +39,12 @@ export default function Newsletter() {
                 <h2
                   id="newsletter-title"
                   className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight"
-                  style={{ textTransform: 'uppercase' }}
                 >
-                  <span className="block">The 3%</span>
-                  <span className="block">Newsletter</span>
+                  The 3% Confessions
                 </h2>
 
                 <p className="mt-3 text-sm md:text-base text-white/80">
-                  3% Founder companion stack
+                  Weekly notes to keep you in Founder Mode.
                 </p>
 
                 <div className="mt-5">
@@ -63,14 +60,13 @@ export default function Newsletter() {
                                hover:bg-[color:var(--glow)]
                                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
                   >
-                    Sign up to newsletter
+                    Join the 3%
                   </motion.a>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Top hairline so the card matches page chrome */}
           <div aria-hidden className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-white/10" />
         </div>
       </div>
