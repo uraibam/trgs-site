@@ -5,6 +5,8 @@ import Journey from "../components/Journey";
 import Pillars from "../components/Pillars";
 import Conversations from "../components/Conversations";
 import Newsletter from "../components/Newsletter";
+import RocketEnding from "../components/RocketEnding";
+import FooterUtility from "../components/FooterUtility";
 
 export default function Page() {
   return (
@@ -17,6 +19,8 @@ export default function Page() {
       <Pillars />
       <Conversations />
       <Newsletter />
+      <RocketEnding />
+      <FooterUtility />
     </main>
   );
 }
