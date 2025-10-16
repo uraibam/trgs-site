@@ -103,15 +103,33 @@ export default function RocketEnding() {
               <div
                 className="grid divide-x divide-white/15 overflow-x-auto rounded-b-2xl border-t border-white/10
                            bg-black/85 backdrop-blur-[2px]"
-                style={{ gridTemplateColumns: 'minmax(220px,1.2fr) repeat(5, minmax(88px, 1fr))' }}
+                style={{ gridTemplateColumns: 'minmax(300px,1.4fr) repeat(5, minmax(88px, 1fr))' }}
               >
-                {/* Left title cell */}
-                <div className="flex items-center gap-3 px-5 py-4">
-                  <span className="inline-block rounded bg-white/5 p-2 text-[color:var(--flare)]">
-                    <IconRocket />
-                  </span>
-                  <span className="text-lg font-semibold tracking-tight uppercase">Join the Journey</span>
+                {/* Left title cell — bolder, attention slab */}
+                <div className="relative flex items-center gap-4 px-6 py-5 bg-white/[0.03]">
+                  {/* subtle left accent bar */}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute left-0 top-0 h-full w-[3px]
+                    bg-[linear-gradient(180deg,var(--flare),transparent)]"
+                    />
+                  {/* rocket badge */}
+                  <div className="grid place-items-center rounded-lg bg-[color:var(--flare)] px-2.5 py-2 shadow-[0_8px_30px_rgba(255,78,0,0.25)]">
+                    <span className="text-black">
+                      <IconRocket />
+                    </span>
+                  </div>
+                  {/* headline */}
+                  <div className="leading-tight">
+                    <div className="text-xl md:text-2xl font-extrabold tracking-tight uppercase">
+                      Join the <span className="text-[color:var(--flare)]">Journey</span>
+                    </div>
+                    <div className="mt-0.5 hidden text-xs text-white/70 sm:block">
+                      Be first when we light the next stage.
+                    </div>
+                  </div>
                 </div>
+
 
                 {/* Social cells */}
                 {cells.slice(1).map((c) => (
